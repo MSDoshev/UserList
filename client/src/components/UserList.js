@@ -1,9 +1,24 @@
+import { useState } from "react";
 import User from "./User";
+import UserDetails from "./UserDetails";
+import * as userService from "../services/userService";
 
 export default function UserList({
     users,
+    
 }){
+
+    const [selectedUser, setSelectedUser] = useState(null)
+    const onInfoClick = async(userId) =>{
+       const user = await userService.getOne(userId);
+       setSelectedUser(user);
+    }
+    const onClose = () =>{
+        setSelectedUser(null)
+    }
     return(
+        <>
+       {selectedUser && <UserDetails {...selectedUser} onClose={onClose}/>}
         <div className="table-wrapper">
          {/* Overlap components   */}
 
@@ -132,10 +147,11 @@ export default function UserList({
           </thead>
           <tbody>
              {/* Table row component  */}
-             {users.map(u => <User key={u._id} {...u}/>)}
+             {users.map(u => <User key={u._id} {...u} onInfoClick={onInfoClick}/>)}
             
           </tbody>
         </table>
       </div>
+      </>
     );
 }
