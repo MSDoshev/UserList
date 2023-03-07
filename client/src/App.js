@@ -1,17 +1,37 @@
+import { useEffect, useState } from "react";
+import * as userService from "./services/userService";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
 import Search from "./components/Search";
 import "./App.css";
 import UserList from "./components/UserList";
 function App() {
+    const [users, setUsers] = useState([])
+
+    useEffect( () => {
+    //    async function getUsers(){
+    //     const users = await userService.getAll();
+    //     console.log(users);
+    //    }
+    //    getUsers();
+    userService.getAll()
+    .then(users => {
+        setUsers(users)
+    })
+    .catch(err => {
+        console.log('Error', err);
+    })
+    }, [])
+
   return (
     <>
       <Header />
+      
 
       <main className="main">
-        <section class="card users-container">
+        <section className="card users-container">
           <Search />
-          <UserList/>
+          <UserList users ={users}/>
         </section>
       </main>
 
