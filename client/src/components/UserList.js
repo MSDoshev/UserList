@@ -1,24 +1,37 @@
 import { useState } from "react";
 import User from "./User";
 import UserDetails from "./UserDetails";
+import UserCreate from "./UserCreate";
 import * as userService from "../services/userService";
 
 export default function UserList({
     users,
+    onUserCreateSubmit,
+    onDeleteClick,
     
 }){
 
-    const [selectedUser, setSelectedUser] = useState(null)
-    const onInfoClick = async(userId) =>{
+  const [selectedUser, setSelectedUser] = useState(null)
+  const [showAddUser, setShowAddUser] = useState(false)
+  const onInfoClick = async(userId) =>{
        const user = await userService.getOne(userId);
        setSelectedUser(user);
     }
     const onClose = () =>{
-        setSelectedUser(null)
+        setSelectedUser(null);
+        setShowAddUser(false);
+    }
+    const onUserAddClick = () =>{
+      setShowAddUser(true);
+    }
+    const onUserCreateSubmitHandler = (e)=>{
+      onUserCreateSubmit(e);
+      setShowAddUser(false)
     }
     return(
         <>
        {selectedUser && <UserDetails {...selectedUser} onClose={onClose}/>}
+       {showAddUser && <UserCreate onClose={onClose} onUserCreateSubmit={onUserCreateSubmitHandler}/>}
         <div className="table-wrapper">
          {/* Overlap components   */}
 
@@ -147,11 +160,18 @@ export default function UserList({
           </thead>
           <tbody>
              {/* Table row component  */}
-             {users.map(u => <User key={u._id} {...u} onInfoClick={onInfoClick}/>)}
+             {users.map(u => <User 
+                    key={u._id}
+                    {...u} 
+                    onInfoClick={onInfoClick}
+                    onDeleteClick={onDeleteClick}
+             />)}
             
           </tbody>
         </table>
       </div>
+
+      <button className="btn-add btn" onClick={onUserAddClick}>Add new user</button>
       </>
     );
 }
