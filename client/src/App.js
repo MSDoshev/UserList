@@ -30,13 +30,14 @@ function App() {
 
       const createdUser = await userService.create(data);
      
-      setUsers(state =>[...state, createdUser])
+      setUsers(state =>[...state, createdUser]);
 
-    }
+    };
 
-    const onDeleteClick = async (userId) =>{
-      
-    }
+    const onUserDelete = async (userId) =>{
+      await userService.remove(userId);
+      setUsers(state => state.filter(x => x._id !== userId));
+    };
   return (
     <>
       <Header />
@@ -48,7 +49,7 @@ function App() {
           <UserList 
               users ={users} 
               onUserCreateSubmit={onUserCreateSubmit}
-              onDeleteClick={onDeleteClick}
+              onUserDelete={onUserDelete}
           />
 
           

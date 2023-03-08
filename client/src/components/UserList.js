@@ -3,16 +3,18 @@ import User from "./User";
 import UserDetails from "./UserDetails";
 import UserCreate from "./UserCreate";
 import * as userService from "../services/userService";
+import UserDelete from "./UserDelete";
 
 export default function UserList({
     users,
     onUserCreateSubmit,
-    onDeleteClick,
+    onUserDelete,
     
 }){
 
-  const [selectedUser, setSelectedUser] = useState(null)
-  const [showAddUser, setShowAddUser] = useState(false)
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [showDeleteUser, setShowDeleteUser] = useState(false);
+  const [showAddUser, setShowAddUser] = useState(false);
   const onInfoClick = async(userId) =>{
        const user = await userService.getOne(userId);
        setSelectedUser(user);
@@ -20,6 +22,7 @@ export default function UserList({
     const onClose = () =>{
         setSelectedUser(null);
         setShowAddUser(false);
+        setShowDeleteUser(null);
     }
     const onUserAddClick = () =>{
       setShowAddUser(true);
@@ -28,10 +31,21 @@ export default function UserList({
       onUserCreateSubmit(e);
       setShowAddUser(false)
     }
+
+    const onDeleteClick = (userId) =>{
+      console.log(userId);
+      setShowDeleteUser(userId);
+    };
+
+    const onDeleteHandler = ()=>{
+      onUserDelete(showDeleteUser);
+      onClose();
+    }
     return(
         <>
        {selectedUser && <UserDetails {...selectedUser} onClose={onClose}/>}
        {showAddUser && <UserCreate onClose={onClose} onUserCreateSubmit={onUserCreateSubmitHandler}/>}
+       {showDeleteUser && <UserDelete onClose={onClose} onDelete={onDeleteHandler}/>}
         <div className="table-wrapper">
          {/* Overlap components   */}
 
