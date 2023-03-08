@@ -9,11 +9,13 @@ export default function UserList({
     users,
     onUserCreateSubmit,
     onUserDelete,
+    onUserUpdateSubmit,
     
 }){
 
   const [selectedUser, setSelectedUser] = useState(null);
   const [showDeleteUser, setShowDeleteUser] = useState(false);
+  const [showEditUser, setShowEditUser] = useState(null);
   const [showAddUser, setShowAddUser] = useState(false);
   const onInfoClick = async(userId) =>{
        const user = await userService.getOne(userId);
@@ -23,6 +25,7 @@ export default function UserList({
         setSelectedUser(null);
         setShowAddUser(false);
         setShowDeleteUser(null);
+        setShowEditUser(null)
     }
     const onUserAddClick = () =>{
       setShowAddUser(true);
@@ -30,6 +33,11 @@ export default function UserList({
     const onUserCreateSubmitHandler = (e)=>{
       onUserCreateSubmit(e);
       setShowAddUser(false)
+    }
+    const onUserUpdateSubmitHandler = (e, userId) => {
+      onUserUpdateSubmit(e, userId);
+      setShowEditUser(null);
+
     }
 
     const onDeleteClick = (userId) =>{
@@ -41,11 +49,16 @@ export default function UserList({
       onUserDelete(showDeleteUser);
       onClose();
     }
+    const onEditClick = async(userId) =>{
+      const user = await userService.getOne(userId)
+      setShowEditUser(user);
+    }
     return(
         <>
        {selectedUser && <UserDetails {...selectedUser} onClose={onClose}/>}
        {showAddUser && <UserCreate onClose={onClose} onUserCreateSubmit={onUserCreateSubmitHandler}/>}
        {showDeleteUser && <UserDelete onClose={onClose} onDelete={onDeleteHandler}/>}
+       {showEditUser && <UserCreate user={showEditUser} onClose={onClose} onUserCreateSubmit={onUserUpdateSubmitHandler}/>}
         <div className="table-wrapper">
          {/* Overlap components   */}
 
@@ -179,6 +192,7 @@ export default function UserList({
                     {...u} 
                     onInfoClick={onInfoClick}
                     onDeleteClick={onDeleteClick}
+                    onEditClick={onEditClick}
              />)}
             
           </tbody>
