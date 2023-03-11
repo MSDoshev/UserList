@@ -10,6 +10,10 @@ export default function UserList({
     onUserCreateSubmit,
     onUserDelete,
     onUserUpdateSubmit,
+    formValues,
+    formChangeHandler,
+    formErrors,
+    formValidate,
     
 }){
 
@@ -56,8 +60,15 @@ export default function UserList({
     return(
         <>
        {selectedUser && <UserDetails {...selectedUser} onClose={onClose}/>}
-       {showAddUser && <UserCreate onClose={onClose} onUserCreateSubmit={onUserCreateSubmitHandler}/>}
        {showDeleteUser && <UserDelete onClose={onClose} onDelete={onDeleteHandler}/>}
+       {showAddUser && 
+          <UserCreate 
+          onClose={onClose} 
+          onUserCreateSubmit={onUserCreateSubmitHandler} 
+          formValues={formValues} 
+          formChangeHandler={formChangeHandler}
+          formErrors={formErrors}
+          formValidate={formValidate}/>}
        {showEditUser && <UserCreate user={showEditUser} onClose={onClose} onUserCreateSubmit={onUserUpdateSubmitHandler}/>}
         <div className="table-wrapper">
          {/* Overlap components   */}

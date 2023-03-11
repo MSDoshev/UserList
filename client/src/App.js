@@ -5,8 +5,34 @@ import Header from "./components/Header";
 import Search from "./components/Search";
 import "./App.css";
 import UserList from "./components/UserList";
+import formValidationUtil from "./utils/validation"
 function App() {
     const [users, setUsers] = useState([])
+    const [formValues, setFormValues] = useState({
+      firstName: '',
+      lastName: '',
+      country:'',
+      city:'',
+      street:'',
+      streetNumber:'',
+      email:'',
+      phoneNumber: '',
+      imageUrl: '',
+     
+  
+    })
+    const [formErrors, setFormErrors] = useState({
+      firstName: '',
+      lastName: '',
+      country:'',
+      city:'',
+      street:'',
+      streetNumber:'',
+      email:'',
+      phoneNumber: '',
+      imageUrl: '',
+      
+    })
 
     useEffect( () => {
     //    async function getUsers(){
@@ -49,6 +75,31 @@ function App() {
       await userService.remove(userId);
       setUsers(state => state.filter(x => x._id !== userId));
     };
+
+    const formChangeHandler = (e) =>{
+     
+      setFormValues(state =>({...state, [e.target.name]: e.target.value}))
+
+    };
+    const formValidate =(e) =>{
+      const {name, value} = e.target;
+      const errors = {};
+      if (formValidationUtil[name]) {
+        const { validate, minLength, maxLength, min, errorMessage } = formValidationUtil[name];
+    
+        if (minLength && value.length < minLength) {
+          errors[name] = errorMessage;
+        } else if (maxLength && value.length > maxLength) {
+          errors[name] = errorMessage;
+        } else if (min !== undefined && parseInt(value, 10) < min) {
+          errors[name] = errorMessage;
+        } else if (validate && !validate(value)) {
+          errors[name] = errorMessage;
+        }
+      }
+    
+      setFormErrors(errors)
+    }
   return (
     <>
       <Header />
@@ -62,6 +113,10 @@ function App() {
               onUserCreateSubmit={onUserCreateSubmit}
               onUserUpdateSubmit={onUserUpdateSubmit}
               onUserDelete={onUserDelete}
+              formValues={formValues}
+              formChangeHandler={formChangeHandler}
+              formErrors={formErrors}
+              formValidate={formValidate}
           />
 
           

@@ -1,7 +1,11 @@
 export default function UserCreate({
   user,
   onClose,
-  onUserCreateSubmit
+  onUserCreateSubmit,
+  formValues,
+  formChangeHandler,
+  formErrors,
+  formValidate,
 }) {
   return (
     <div className="overlay">
@@ -24,11 +28,14 @@ export default function UserCreate({
                   <span>
                     <i className="fa-solid fa-user"></i>
                   </span>
-                  <input id="firstName" name="firstName" type="text" defaultValue={user?.firstName} />
+                  <input id="firstName" name="firstName" type="text" value={formValues.firstName} onChange={formChangeHandler} onBlur={formValidate}/>
                 </div>
+                {formErrors.firstName &&
                 <p className="form-error">
-                  First name should be at least 3 characters long!
+                    {formErrors.firstName}
                 </p>
+                }
+                
               </div>
               <div className="form-group">
                 <label htmlFor="lastName">Last name</label>
@@ -36,11 +43,13 @@ export default function UserCreate({
                   <span>
                     <i className="fa-solid fa-user"></i>
                   </span>
-                  <input id="lastName" name="lastName" type="text" defaultValue={user?.lastName}/>
+                  <input id="lastName" name="lastName" type="text" value={formValues.lastname} onChange={formChangeHandler} onBlur={formValidate}/>
                 </div>
+                {formErrors.lastName &&
                 <p className="form-error">
-                  Last name should be at least 3 characters long!
+                    {formErrors.lastName}
                 </p>
+                }
               </div>
             </div>
 
@@ -51,9 +60,13 @@ export default function UserCreate({
                   <span>
                     <i className="fa-solid fa-envelope"></i>
                   </span>
-                  <input id="email" name="email" type="text" defaultValue={user?.email}/>
+                  <input id="email" name="email" type="text" value={formValues.email} onChange={formChangeHandler} onBlur={formValidate}/>
                 </div>
-                <p className="form-error">Email is not valid!</p>
+                {formErrors.email &&
+                <p className="form-error">
+                    {formErrors.email}
+                </p>
+                }
               </div>
               <div className="form-group">
                 <label htmlFor="phoneNumber">Phone number</label>
@@ -61,9 +74,13 @@ export default function UserCreate({
                   <span>
                     <i className="fa-solid fa-phone"></i>
                   </span>
-                  <input id="phoneNumber" name="phoneNumber" type="text" defaultValue={user?.phoneNumber}/>
+                  <input id="phoneNumber" name="phoneNumber" type="text" value={formValues.phoneNumber} onChange={formChangeHandler} onBlur={formValidate}/>
                 </div>
-                <p className="form-error">Phone number is not valid!</p>
+                {formErrors.phoneNumber &&
+                <p className="form-error">
+                    {formErrors.phoneNumber}
+                </p>
+                }
               </div>
             </div>
 
@@ -73,9 +90,13 @@ export default function UserCreate({
                 <span>
                   <i className="fa-solid fa-image"></i>
                 </span>
-                <input id="imageUrl" name="imageUrl" type="text" defaultValue={user?.imageUrl}/>
+                <input id="imageUrl" name="imageUrl" type="text" value={formValues.imageUrl} onChange={formChangeHandler} onBlur={formValidate}/>
               </div>
-              <p className="form-error">ImageUrl is not valid!</p>
+              {formErrors.imageUrl &&
+                <p className="form-error">
+                    {formErrors.imageUrl}
+                </p>
+                }
             </div>
 
             <div className="form-row">
@@ -85,11 +106,13 @@ export default function UserCreate({
                   <span>
                     <i className="fa-solid fa-map"></i>
                   </span>
-                  <input id="country" name="country" type="text" defaultValue={user?.address.country}/>
+                  <input id="country" name="country" type="text" value={formValues.country} onChange={formChangeHandler} onBlur={formValidate}/>
                 </div>
+                {formErrors.country &&
                 <p className="form-error">
-                  Country should be at least 2 characters long!
+                    {formErrors.country}
                 </p>
+                }
               </div>
               <div className="form-group">
                 <label htmlFor="city">City</label>
@@ -97,11 +120,13 @@ export default function UserCreate({
                   <span>
                     <i className="fa-solid fa-city"></i>
                   </span>
-                  <input id="city" name="city" type="text" defaultValue={user?.address.city}/>
+                  <input id="city" name="city" type="text" value={formValues.city} onChange={formChangeHandler} onBlur={formValidate}/>
                 </div>
+                {formErrors.city &&
                 <p className="form-error">
-                  City should be at least 3 characters long!
+                    {formErrors.city}
                 </p>
+                }
               </div>
             </div>
 
@@ -112,11 +137,13 @@ export default function UserCreate({
                   <span>
                     <i className="fa-solid fa-map"></i>
                   </span>
-                  <input id="street" name="street" type="text" defaultValue={user?.address.street}/>
+                  <input id="street" name="street" type="text" value={formValues.street} onChange={formChangeHandler} onBlur={formValidate}/>
                 </div>
+                {formErrors.street &&
                 <p className="form-error">
-                  Street should be at least 3 characters long!
+                    {formErrors.street}
                 </p>
+                }
               </div>
               <div className="form-group">
                 <label htmlFor="streetNumber">Street number</label>
@@ -124,18 +151,20 @@ export default function UserCreate({
                   <span>
                     <i className="fa-solid fa-house-chimney"></i>
                   </span>
-                  <input id="streetNumber" name="streetNumber" type="text" defaultValue={user?.address.streetNumber}/>
+                  <input id="streetNumber" name="streetNumber" type="text" value={formValues.streetNumber} onChange={formChangeHandler} onBlur={formValidate}/>
                 </div>
+                {formErrors.streetNumber &&
                 <p className="form-error">
-                  Street number should be a positive number!
+                    {formErrors.streetNumber}
                 </p>
+                }
               </div>
             </div>
             <div id="form-actions">
               <button id="action-save" className="btn" type="submit">
                 Save
               </button>
-              <button id="action-cancel" className="btn" type="button">
+              <button id="action-cancel" className="btn" type="button" onClick={onClose}>
                 Cancel
               </button>
             </div>
